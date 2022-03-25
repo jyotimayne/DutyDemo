@@ -1,0 +1,171 @@
+﻿@using DutyDemo.Models;
+@{
+    ViewBag.Title = "ProcessResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>ImportExcel</h3>
+<!--[if !IE]><!-->
+<style type="text/css">
+
+
+    /* Generic Styling, for Desktops/Laptops */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    /* Zebra striping */
+    tr:nth-of-type(odd) {
+        background: #eee;
+    }
+
+    th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+    }
+
+    td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+    /*
+    Max width before this PARTICULAR table gets nasty
+    This query will take effect for any screen smaller than 760px
+    and also iPads specifically.
+    */
+    @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+        /* Force table to not be like tables anymore */
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+            /* Hide table headers (but not display: none;, for accessibility) */
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+        tr {
+            border: 1px solid #ccc;
+        }
+
+        td {
+            /* Behave  like a "row" */
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+        }
+
+            td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+            }
+            /*
+     Label the data
+     */
+            td:before {
+                content: attr(data-title);
+            }
+    }
+</style>
+
+<!--<![endif]-->
+@using (Html.BeginForm("ProcessResult", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+    <table>
+        <tr><td>Excel file</td><td><input type="file" id="FileUpload" name="FileUpload" /></td></tr>
+        <tr><td></td><td><input type="submit" id="Submit" name="Submit" value="Submit" /></td></tr>
+    </table>
+    if (ViewBag.Data != null)
+    {
+        <span> Excel data loaded into datatable.</span>
+        <br />
+    }
+
+    if (Model != null)
+    {
+        <h6><b>Years during which the revenues from all Import Duties was the highest:</b></h6>
+        if (Model.importDetails != null)
+        {
+            <table>
+                <tr>
+                    <th>Year</th>
+                    <th>Hightest Revenue Import Duty</th>
+                </tr>
+                @foreach (var test in Model.importDetails)
+                {
+                    <tr>
+                        <td>@test.Key</td>
+                        <td>@test.Value</td>
+                    </tr>
+                }
+            </table>
+        }
+
+        <br />
+        <h6><b>Years during which the revenues from all Excise duties was the highest:</b></h6>
+        if (Model.exciseDetails != null)
+        {
+            <table>
+                <tr>
+                    <th>Year</th>
+                    <th>Hightest Revenue Excise Duty</th>
+                </tr>
+                @foreach (var test in Model.exciseDetails)
+                {
+                    <tr>
+                        <td>@test.Key</td>
+                        <td>@test.Value</td>
+                    </tr>
+                }
+            </table>
+        }
+        <br />
+        <h6><b>During each year, category of Import-Duty having highest revenues:</b></h6>
+        if (Model.yearWiseImportDuties != null)
+        {
+            <table>
+                <tr>
+                    <th>Year</th>
+                    <th>Category Import Duty</th>
+                </tr>
+                @foreach (var test in Model.yearWiseImportDuties)
+                {
+                    <tr>
+                        <td>@test.Key</td>
+                        <td>@test.Value</td>
+                    </tr>
+                }
+            </table>
+        }
+        <br />
+        <h6><b>During each year, category of Excise-Duty having highest revenues:</b></h6>
+        if (Model.yearWiseExciseDuties != null)
+        {
+            <table>
+                <tr>
+                    <th>Year</th>
+                    <th>Category Excise Duty</th>
+                </tr>
+                @foreach (var test in Model.yearWiseExciseDuties)
+                {
+                    <tr>
+                        <td>@test.Key</td>
+                        <td>@test.Value</td>
+                    </tr>
+                }
+            </table>
+        }
+        <br />
+    }
+}
